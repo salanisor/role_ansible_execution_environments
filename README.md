@@ -40,7 +40,7 @@ Before running this role update the following configuration files with the prope
 
 **A**.) [Configure](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/1.0/html/getting_started_with_red_hat_ansible_automation_hub/proc-configure-automation-hub-server) `ansible.cfg` with your `ansible_hub` [authentication token](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/1.0/html/getting_started_with_red_hat_ansible_automation_hub/proc-create-api-token).
 
-**B**.) [Configure the registry credentials](https://access.redhat.com/terms-based-registry/) to pull from registry.redhat.io when building your Execution Environments and recommend updating this with your internal / external registry credentials you'll be pushing the Execution Environment container image to.
+**B**.) [Configure the registry credentials](https://access.redhat.com/terms-based-registry/) to pull from `registry.redhat.io` when building your Execution Environments and recommend updating this with your internal / external registry credentials you'll be pushing the Execution Environment container image to.
 
 **C**.) Alternatively, drop in the [Tower cli configuration](https://tower-cli.readthedocs.io/en/latest/quickstart.html). First, you'll need to install the [`ansible-tower-cli`](https://tower-cli.readthedocs.io/en/latest/install.html) via pip.
 
@@ -48,7 +48,7 @@ Before running this role update the following configuration files with the prope
 Example Playbook
 ----------------
 
-Once you update the [role varilables](https://github.com/salanisor/role_ansible_execution_environments#role-variables) execute the following playbook to build your Execution Environment varilable.
+Once you update the [role varilables](https://github.com/salanisor/role_ansible_execution_environments#role-variables) execute the following playbook to build your Execution Environment.
 
     ---
     #

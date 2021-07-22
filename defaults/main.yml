@@ -3,3 +3,4 @@
 builder_path: '/tmp/ansible-builder'
 venv: 'test_venv'
 tag_version: '0.0.1'
+remote_registry: 'quay.io/canit0/ee-custom-container'

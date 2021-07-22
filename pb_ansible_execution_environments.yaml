@@ -8,4 +8,4 @@
   connection: local
   gather_facts: false
   roles:
-  - { role: ../role_ansible_execution_environments }
+  - { role: role_ansible_execution_environments }

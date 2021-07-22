@@ -2,38 +2,30 @@ ARG VERSION=0.0.0
 
 FROM registry.access.redhat.com/ubi8/python-39 as BUILD
 
-EXPOSE 8080
-
 LABEL summary="Execution environment for FAA Ansible." \
       description="This is the execution environment for FAA Ansible." \
       io.k8s.description="This is the execution environment for FAA Ansible." \
       io.k8s.display-name="FAA Ansible Execution Container" \
-      io.openshift.expose-services="8080:http" \
       io.openshift.tags="FAA,ansible" \
       com.redhat.component="faa-ansible-container" \
       name="faa_ansible_ee" \
       version="${VERSION}" \
-      usage="s2i build https://github.com/sclorg/s2i-python-container.git --context-dir=3.8/test/setup-test-app/ ubi8/python-38 python-sample-app" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="openstack.org <kecarter@redhat.com>"
 
 USER root
 
 WORKDIR /build
-RUN python3.8 -m venv /build/builder
+RUN python3.9 -m venv /build/builder
 RUN /build/builder/bin/pip install --force --upgrade pip setuptools bindep
 ADD bindep.txt /build/bindep.txt
 RUN dnf install -y $(/build/builder/bin/bindep -b -f /build/bindep.txt test)
 
 ADD requirements.txt /build/requirements.txt
 WORKDIR /ansible-runner
-RUN /bin/python3.8 -m venv /ansible-runner
+RUN /bin/python3.9 -m venv /ansible-runner
 RUN /ansible-runner/bin/pip install --force --upgrade pip setuptools bindep
 RUN /ansible-runner/bin/pip install -r /build/requirements.txt --force --upgrade
-RUN /ansible-runner/bin/pip install git+https://github.com/ansible/ansible
-RUN /ansible-runner/bin/pip install git+https://github.com/ansible/ansible-runner
-RUN /ansible-runner/bin/pip install git+https://github.com/openstack/tripleo-ansible
-RUN /ansible-runner/bin/pip install git+https://github.com/openstack/tripleo-common
 
 ADD requirements.yaml /build/requirements.yaml
 WORKDIR /usr/share/ansible/roles
@@ -45,8 +37,8 @@ RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/
 RUN chmod +x /usr/local/bin/dumb-init
 
 FROM registry.access.redhat.com/ubi8/ubi-minimal
-RUN microdnf install -y openssh-clients python3.8 && rm -rf /var/cache/{dnf,yum}
-RUN /bin/python3.8 -m venv --upgrade /ansible-runner
+RUN microdnf install -y openssh-clients python3.9 && rm -rf /var/cache/{dnf,yum}
+RUN /bin/python3.9 -m venv --upgrade /ansible-runner
 COPY --from=BUILD /usr/share/ansible/roles /usr/share/ansible/roles
 COPY --from=BUILD /usr/share/ansible/collections /usr/share/ansible/collections
 COPY --from=BUILD /ansible-runner /ansible-runner

@@ -7,6 +7,9 @@
   file:
     path: "{{builder_path}}"
     state: directory
+  tags:
+  - container
+# Task written to run on RHEL 7 Tower node.
 - name: "Create virtual environment"
   command: >
      /usr/bin/python3.6 -m venv "{{builder_path}}/{{venv}}"
@@ -16,10 +19,24 @@
     src: pyvenv
     dest: "{{builder_path}}/{{venv}}/bin/pyvenv"
     mode: '0555'
+- name: "Create Containerfile - builder"
+  copy:
+    src: Containerfile
+    dest: "{{builder_path}}/Containerfile"
+  tags:
+  - container
+- name: "Create bindep file - builder"
+  copy:
+    src: bindep.txt
+    dest: "{{builder_path}}/bindep.txt"
+  tags:
+  - container
 - name: "Create requirements.txt file - builder"
   copy:
     src: requirements-venv.txt
-    dest: "{{builder_path}}/{{venv}}/requirements.txt"
+    dest: "{{builder_path}}/requirements.txt"
+  tags:
+  - container
 - name: "Create requirements.txt file - EE"
   copy:
     dest: "{{builder_path}}/requirements.txt"
@@ -33,11 +50,21 @@
   copy:
     src: execution-environment.yml
     dest: "{{builder_path}}/execution-environment.yml"
-- name: "Create requirements file - EE"
-  copy:
-    dest: "{{builder_path}}/requirements.txt"
-    content: |
-      psutil
+  tags:
+  - container
+- name: "Build Environment - Container"
+  block:
+  - name: "Build the Execution Environment image"
+    command: 
+      cmd: "podman image build -t {{remote_registry}}:{{tag_version}} -f Containerfile"
+      chdir: "{{builder_path}}/"
+  - name: "Push the Execution Environment image"
+    command: 
+      cmd: "podman push {{remote_registry}}:{{tag_version}}"
+  vars:
+    PROJECT_HOME: "{{builder_path}}/"
+  tags:
+  - container
 - name: "Build Environment"
   block:
   # The following step is required seperately else the next task will fail.
@@ -50,7 +77,7 @@
       state: latest
   - name: "Install software for the builder environment"
     pip:
-      requirements: "{{builder_path}}/{{venv}}/requirements.txt"
+      requirements: "{{builder_path}}/{{venv}}/requirements-venv.txt"
       state: latest
   - name: "Build the Execution Environment image"
     command: 
@@ -58,7 +85,7 @@
       chdir: "{{builder_path}}/"
   - name: "Push the Execution Environment image"
     command: 
-      cmd: "podman push quay.io/canit0/ee-custom-container:{{tag_version}}"
+      cmd: "podman push {{remote_registry}}:{{tag_version}}"
   vars:
     ansible_python_interpreter: "{{builder_path}}/{{venv}}/bin/pyvenv"
     PROJECT_HOME: "{{builder_path}}/{{venv}}" 
