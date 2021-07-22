@@ -1,0 +1,65 @@
+---
+# Ansible playbook to configure RHEL 8 with buildah to run as a non-root user.
+# How-to: ansible-playbook -v pb_buildah.yaml -i inventory
+#
+- hosts: tower
+  become: yes
+  tasks:
+  - name: "Install container packages"
+    package:
+      name: "{{item}}"
+      state: latest
+    loop:
+    - podman
+    - skopeo
+    - buildah
+  - name: "Create subuid range file"
+    copy:
+      dest: /etc/subuid
+      content: |
+        awx:10000:65536
+      mode: '0644'
+  - name: "Create subgid range file"
+    copy:
+      dest: /etc/subgid
+      content: |
+        awx:10000:65536
+      mode: '0644'
+  # Will require a reboot to pick up changes
+  - name: "Set the correct context for user_namespaces"
+    copy:
+      dest: /etc/sysctl.d/99-rootless.conf
+      content: |
+        user.max_user_namespaces=10000
+  - name: "Create docker directory"
+    file:
+      path: /var/lib/awx/.docker
+      state: directory
+  - name: "Configure registry credentials"
+    copy:
+      src: test-salanis-auth.json
+      dest: /var/lib/awx/.docker/config.json
+  - name: "Increase the nofile for awx to 10240"
+    lineinfile:
+      path: /etc/security/limits.conf
+      state: present
+      insertbefore: '# End of file'
+      line: "{{item}}"
+    loop:
+      - 'awx        soft    nofile          10240'
+      - 'awx        hard    nofile          10240'
+  - name: "Drop in the proper ansible.cfg file"
+    copy:
+      src: ansible.cfg
+      dest: /etc/ansible/ansible.cfg
+      backup: yes
+      mode: '0644'
+      owner: root
+      group: root
+      decrypt: yes
+  - name: "Drop in the Tower cli config"
+    template:
+      src: ../templates/tower_cli.cfg.j2
+      dest: /etc/tower/tower_cli.cfg
+      decrypt: yes
+    

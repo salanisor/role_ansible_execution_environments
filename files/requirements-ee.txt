@@ -1,0 +1,3 @@
+# If you need an exact minor version. Address the package as follows:
+# ansible-core==2.11.3
+psutil

@@ -1,0 +1,11 @@
+---
+#
+# Simple Ansible playbook to set up the environment to create an Execution Environment image.
+#
+# How-to: ansible-playbook -v execution_environments.yaml
+#
+- hosts: 127.0.0.1
+  connection: local
+  gather_facts: false
+  roles:
+  - { role: ../role_ansible_execution_environments }

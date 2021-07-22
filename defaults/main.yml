@@ -1,0 +1,5 @@
+---
+# defaults file for role_ansible_execution_environments
+builder_path: '/tmp/ansible-builder'
+venv: 'test_venv'
+tag_version: '0.0.1'

@@ -1,0 +1,64 @@
+---
+# tasks file for role_ansible_execution_environments
+- stat:
+    path: "{{builder_path}}/{{venv}}/bin/activate"
+  register: p
+- name: "Create ansible-builder directory"
+  file:
+    path: "{{builder_path}}"
+    state: directory
+- name: "Create virtual environment"
+  command: >
+     /usr/bin/python3.6 -m venv "{{builder_path}}/{{venv}}"
+  when: p.stat.isdir is not defined
+- name: "Create pyvenv file"
+  copy:
+    src: pyvenv
+    dest: "{{builder_path}}/{{venv}}/bin/pyvenv"
+    mode: '0555'
+- name: "Create requirements.txt file - builder"
+  copy:
+    src: requirements-venv.txt
+    dest: "{{builder_path}}/{{venv}}/requirements.txt"
+- name: "Create requirements.txt file - EE"
+  copy:
+    dest: "{{builder_path}}/requirements.txt"
+    content: |
+      psutil
+- name: "Create requirements.yml file - EE"
+  copy:
+    src: requirements-ee.yml
+    dest: "{{builder_path}}/requirements.yml"
+- name: "Create execution-environment.yml"
+  copy:
+    src: execution-environment.yml
+    dest: "{{builder_path}}/execution-environment.yml"
+- name: "Create requirements file - EE"
+  copy:
+    dest: "{{builder_path}}/requirements.txt"
+    content: |
+      psutil
+- name: "Build Environment"
+  block:
+  # The following step is required seperately else the next task will fail.
+  - name: "Upgrade pip"
+    pip:
+      name:
+        - pip
+        - setuptools
+        - bindep
+      state: latest
+  - name: "Install software for the builder environment"
+    pip:
+      requirements: "{{builder_path}}/{{venv}}/requirements.txt"
+      state: latest
+  - name: "Build the Execution Environment image"
+    command: 
+      cmd: "{{builder_path}}/{{venv}}/bin/ansible-builder build --tag quay.io/canit0/ee-custom-container:{{tag_version}} --container-runtime podman"
+      chdir: "{{builder_path}}/"
+  - name: "Push the Execution Environment image"
+    command: 
+      cmd: "podman push quay.io/canit0/ee-custom-container:{{tag_version}}"
+  vars:
+    ansible_python_interpreter: "{{builder_path}}/{{venv}}/bin/pyvenv"
+    PROJECT_HOME: "{{builder_path}}/{{venv}}" 
