@@ -46,8 +46,8 @@
       insertbefore: '# End of file'
       line: "{{item}}"
     loop:
-      - 'awx        soft    nofile          10240'
-      - 'awx        hard    nofile          10240'
+      - 'awx        soft    nofile          61440'
+      - 'awx        hard    nofile          61440'
   - name: "Drop in the proper ansible.cfg file"
     copy:
       src: ansible.cfg

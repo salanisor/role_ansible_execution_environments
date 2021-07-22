@@ -27,11 +27,11 @@ RUN /bin/python3.9 -m venv /ansible-runner
 RUN /ansible-runner/bin/pip install --force --upgrade pip setuptools bindep
 RUN /ansible-runner/bin/pip install -r /build/requirements.txt --force --upgrade
 
-ADD requirements.yaml /build/requirements.yaml
+ADD requirements.yml /build/requirements.yml
 WORKDIR /usr/share/ansible/roles
-RUN /ansible-runner/bin/ansible-galaxy role install -r /build/requirements.yaml --roles-path /usr/share/ansible/roles
+RUN /ansible-runner/bin/ansible-galaxy role install -r /build/requirements.yml --roles-path /usr/share/ansible/roles
 WORKDIR /usr/share/ansible/collections
-RUN /ansible-runner/bin/ansible-galaxy collection install -r /build/requirements.yaml --collections-path /usr/share/ansible/collections
+RUN /ansible-runner/bin/ansible-galaxy collection install -r /build/requirements.yml --collections-path /usr/share/ansible/collections
 
 RUN wget -O /usr/local/bin/dumb-init https://github.com/Yelp/dumb-init/releases/download/v1.2.5/dumb-init_1.2.5_x86_64
 RUN chmod +x /usr/local/bin/dumb-init
