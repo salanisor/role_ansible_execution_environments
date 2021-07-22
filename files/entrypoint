@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+. /ansible-runner/bin/activate
+
+exec /usr/local/bin/dumb-init -- ${@}
