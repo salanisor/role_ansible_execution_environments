@@ -15,6 +15,8 @@ Requirements
 
 **2**.) Administrative access to an existing Kubernetes cluster to create a namespace to deploy the Execution Environments to.
 
+  - [Kubernetes](https://github.com/salanisor/role_ansible_execution_environments/blob/master/files/execution-environments-k8s-template.yaml) namespace creation template.
+
 **3**.) Docker or Podman installed on the Tower nodes - (configured with non-root privileges tested via Podman).
 
   - You can configure [podman / buildah](https://github.com/salanisor/ansible/blob/master/role_ansible_execution_environments/files/pb_buildah.yaml) to run `podman` as the `awx` user on each of the Tower hosts in the cluster.
