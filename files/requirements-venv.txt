@@ -1,4 +1,5 @@
 ansible
+ansible-navigator
 ansible-builder
 ansible-runner
 ansible-tower-cli

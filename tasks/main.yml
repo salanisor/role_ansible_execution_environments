@@ -43,23 +43,22 @@
     dest: "{{builder_path}}/requirements.txt"
   tags:
   - container
-- name: "Create requirements.txt file - EE"
-  copy:
-    dest: "{{builder_path}}/requirements.txt"
-    content: |
-      psutil
-- name: "Create requirements.yml file - EE"
-  copy:
-    src: requirements-ee.yml
-    dest: "{{builder_path}}/requirements.yml"
 - name: "Create execution-environment.yml"
   copy:
     src: execution-environment.yml
     dest: "{{builder_path}}/execution-environment.yml"
   tags:
   - container
+- name: "Create requirements.yml file - EE"
+  copy:
+    src: requirements-ee.yml
+    dest: "{{builder_path}}/requirements.yml"
 - name: "Build Environment - Container"
   block:
+  - name: "Create requirements.txt file - builder"
+    copy:
+      src: requirements-venv.txt
+      dest: "{{builder_path}}/requirements.txt"
   - name: "Build the Execution Environment image"
     command: 
       cmd: "podman image build -t {{remote_registry}}:{{tag_version}} -f Containerfile"
@@ -73,6 +72,15 @@
   - container
 - name: "Build Environment"
   block:
+  - name: "Create requirements.txt file - builder"
+    copy:
+      src: requirements-venv.txt
+      dest: "{{builder_path}}/{{venv}}/requirements.txt"
+  - name: "Create requirements.txt file - EE"
+    copy:
+      dest: "{{builder_path}}/requirements.txt"
+      content: |
+        psutil
   # The following step is required seperately else the next task will fail.
   - name: "Upgrade pip"
     pip:
