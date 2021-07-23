@@ -13,6 +13,7 @@
     - podman
     - skopeo
     - buildah
+    - libselinux-python
   - name: "Create subuid range file"
     copy:
       dest: /etc/subuid
