@@ -15,7 +15,7 @@ Requirements
 
 **2**.) Administrative access to an existing Kubernetes cluster to create a namespace to deploy the Execution Environment to via a [Container Group](https://docs.ansible.com/ansible-tower/latest/html/administration/external_execution_envs.html#ag-container-groups) in Ansible Tower.
 
-  - [Kubernetes](https://github.com/salanisor/role_ansible_execution_environments/blob/master/files/execution-environments-k8s-template.yaml) namespace creation template.
+  - [Kubernetes](https://github.com/salanisor/role_ansible_execution_environments/blob/master/files/execution-environments-k8s-template.yaml) namespace creation template for project `ansible-tower`.
 
 **3**.) Docker or Podman installed on the Tower nodes - (configured with non-root privileges tested via Podman).
 
