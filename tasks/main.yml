@@ -65,6 +65,7 @@
     PROJECT_HOME: "{{builder_path}}/"
   tags:
   - container
+  when: "'container' in ansible_run_tags" 
 - name: "Build Environment"
   block:
   # The following step is required seperately else the next task will fail.
@@ -89,3 +90,4 @@
   vars:
     ansible_python_interpreter: "{{builder_path}}/{{venv}}/bin/pyvenv"
     PROJECT_HOME: "{{builder_path}}/{{venv}}" 
+  when: "'container' not in ansible_run_tags" 
