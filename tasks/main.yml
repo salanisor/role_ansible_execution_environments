@@ -19,6 +19,12 @@
     src: pyvenv
     dest: "{{builder_path}}/{{venv}}/bin/pyvenv"
     mode: '0555'
+- name: "Create entrypoint file - builder"
+  copy:
+    src: entrypoint
+    dest: "{{builder_path}}/entrypoint"
+  tags:
+  - container
 - name: "Create Containerfile - builder"
   copy:
     src: Containerfile
