@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  namespace: ansible-tower
+spec:
+  containers:
+    - image: 'quay.io/canit0/ee-custom-container:0.0.1'
+      tty: true
+      stdin: true
+      imagePullPolicy: Always
+      args:
+        - sleep
+        - infinity

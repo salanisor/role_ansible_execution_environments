@@ -33,6 +33,9 @@ Role Variables
     venv: 'test_venv'
     # Container image tag version.
     tag_version: '0.0.1'
+    # The remote registry you want to publish to.
+    remote_registry: 'quay.io/canit0/ee-custom-container'
+
 
 
 Dependencies
