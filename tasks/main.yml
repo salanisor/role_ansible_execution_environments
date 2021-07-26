@@ -12,7 +12,7 @@
 # Task written to run on RHEL 7 Tower node.
 - name: "Create virtual environment"
   command: >
-     /usr/bin/python3.6 -m venv "{{builder_path}}/{{venv}}"
+     /usr/bin/python3 -m venv "{{builder_path}}/{{venv}}"
   when: p.stat.isdir is not defined
 - name: "Create pyvenv file"
   copy:
@@ -40,7 +40,7 @@
 - name: "Create requirements.txt file - builder"
   copy:
     src: requirements-venv.txt
-    dest: "{{builder_path}}/requirements.txt"
+    dest: "{{builder_path}}/requirements-venv.txt"
   tags:
   - container
 - name: "Create execution-environment.yml"
@@ -52,20 +52,20 @@
 - name: "Create requirements.yml file - EE"
   copy:
     src: requirements-ee.yml
-    dest: "{{builder_path}}/requirements.yml"
+    dest: "{{builder_path}}/requirements-ee.yml"
+- name: "Create requirements.txt file - EE"
+  copy:
+    src: requirements-ee.txt
+    dest: "{{builder_path}}/requirements-ee.txt"
 - name: "Build Environment - Container"
   block:
-  - name: "Create requirements.txt file - builder"
-    copy:
-      src: requirements-venv.txt
-      dest: "{{builder_path}}/requirements.txt"
   - name: "Build the Execution Environment image"
     command: 
       cmd: "podman image build -t {{remote_registry}}:{{tag_version}} -f Containerfile"
       chdir: "{{builder_path}}/"
-  - name: "Push the Execution Environment image"
-    command: 
-      cmd: "podman push {{remote_registry}}:{{tag_version}}"
+      #- name: "Push the Execution Environment image"
+      #command: 
+      #cmd: "podman push {{remote_registry}}:{{tag_version}}"
   vars:
     PROJECT_HOME: "{{builder_path}}/"
   tags:
@@ -73,15 +73,6 @@
   when: "'container' in ansible_run_tags" 
 - name: "Build Environment"
   block:
-  - name: "Create requirements.txt file - builder"
-    copy:
-      src: requirements-venv.txt
-      dest: "{{builder_path}}/{{venv}}/requirements.txt"
-  - name: "Create requirements.txt file - EE"
-    copy:
-      dest: "{{builder_path}}/requirements.txt"
-      content: |
-        psutil
   # The following step is required seperately else the next task will fail.
   - name: "Upgrade pip"
     pip:
@@ -92,15 +83,15 @@
       state: latest
   - name: "Install software for the builder environment"
     pip:
-      requirements: "{{builder_path}}/{{venv}}/requirements-venv.txt"
+      requirements: "{{builder_path}}/requirements-venv.txt"
       state: latest
   - name: "Build the Execution Environment image"
     command: 
       cmd: "{{builder_path}}/{{venv}}/bin/ansible-builder build --tag quay.io/canit0/ee-custom-container:{{tag_version}} --container-runtime podman"
       chdir: "{{builder_path}}/"
-  - name: "Push the Execution Environment image"
-    command: 
-      cmd: "podman push {{remote_registry}}:{{tag_version}}"
+      #- name: "Push the Execution Environment image"
+      #command: 
+      #cmd: "podman push {{remote_registry}}:{{tag_version}}"
   vars:
     ansible_python_interpreter: "{{builder_path}}/{{venv}}/bin/pyvenv"
     PROJECT_HOME: "{{builder_path}}/{{venv}}" 

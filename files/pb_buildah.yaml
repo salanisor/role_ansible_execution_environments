@@ -2,8 +2,10 @@
 # Ansible playbook to configure RHEL 8 with buildah to run as a non-root user.
 # How-to: ansible-playbook -v pb_buildah.yaml -i inventory
 #
-- hosts: tower
-  become: yes
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    tower: false
   tasks:
   - name: "Install container packages"
     package:
@@ -13,7 +15,9 @@
     - podman
     - skopeo
     - buildah
-    - libselinux-python
+    - python39.x86_64
+    when: (ansible_distribution == "RedHat") and
+          (ansible_distribution_major_version >= "8")
   - name: "Create subuid range file"
     copy:
       dest: /etc/subuid
@@ -68,3 +72,4 @@
       dest: /etc/tower/tower_cli.cfg
       decrypt: yes
       group: awx
+    when: tower

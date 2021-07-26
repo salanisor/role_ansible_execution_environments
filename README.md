@@ -1,11 +1,13 @@
 Role Name
 =========
 
+You can build Execution Environment container images to separate the control plane from the execution plane and execute your playbooks and roles directly from Tower on to your Kubernetes cluster.
+
 This role can be used in two ways:
 
 **1**.) You can build an Execution Environment directly via Podman. 
 
-**2**.) Alternatively, you can build a virtual environment on a local machine and push to a local or remote registry with either method.
+**2**.) For testing and local development, you can build a virtual environment on a local machine and push to a local or remote registry with either method.
 
 Requirements
 ------------
