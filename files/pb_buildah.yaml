@@ -36,10 +36,14 @@
     file:
       path: /var/lib/awx/.docker
       state: directory
+      owner: awx
+      group: awx
   - name: "Configure registry credentials"
     copy:
       src: test-salanis-auth.json
       dest: /var/lib/awx/.docker/config.json
+      owner: awx
+      group: awx
   - name: "Increase the nofile for awx to 10240"
     lineinfile:
       path: /etc/security/limits.conf
@@ -47,8 +51,8 @@
       insertbefore: '# End of file'
       line: "{{item}}"
     loop:
-      - 'awx        soft    nofile          61440'
-      - 'awx        hard    nofile          61440'
+      - 'awx        soft    nofile          102400'
+      - 'awx        hard    nofile          102400'
   - name: "Drop in the proper ansible.cfg file"
     copy:
       src: ansible.cfg
@@ -63,4 +67,4 @@
       src: ../templates/tower_cli.cfg.j2
       dest: /etc/tower/tower_cli.cfg
       decrypt: yes
-    
+      group: awx
