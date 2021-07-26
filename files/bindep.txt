@@ -1,15 +1,3 @@
 # Base requirements for RPM distros
 openssl-devel     [platform:rpm]
-python39-devel    [platform:rpm !platform:rhel-7 !platform:centos-7]
-python39-pyyaml   [platform:rpm !platform:rhel-7 !platform:centos-7]
-python3-dnf       [platform:rpm !platform:rhel-7 !platform:centos-7]
-
-# RH Mechanisms
-python-rhsm-certificates                [platform:redhat]
-
-# SELinux cent8
-python3-libselinux  [platform:rpm !platform:rhel-7 !platform:centos-7]
-python3-libsemanage [platform:redhat !platform:rhel-7 !platform:centos-7]
-
-# Required for compressing collected log files in CI
-gzip
+rsync             [platform:rpm]

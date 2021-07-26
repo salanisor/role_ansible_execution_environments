@@ -4,6 +4,7 @@ version: 1
 dependencies:
   galaxy: requirements-ee.yml
   python: requirements-ee.txt
+  system: bindep.txt
 
 additional_build_steps:
   prepend: |
