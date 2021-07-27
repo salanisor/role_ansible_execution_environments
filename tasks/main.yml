@@ -37,10 +37,10 @@
     dest: "{{builder_path}}/bindep.txt"
   tags:
   - container
-- name: "Create requirements.txt file - builder"
+- name: "Create requirements-container.txt file - builder"
   copy:
-    src: requirements-venv.txt
-    dest: "{{builder_path}}/requirements-venv.txt"
+    src: requirements-container.txt
+    dest: "{{builder_path}}/requirements-container.txt"
   tags:
   - container
 - name: "Create execution-environment.yml"
@@ -57,6 +57,10 @@
   copy:
     src: requirements-ee.txt
     dest: "{{builder_path}}/requirements-ee.txt"
+- name: "Create requirements.txt file - venv"
+  copy:
+    src: requirements-venv.txt
+    dest: "{{builder_path}}/requirements-venv.txt"
 - name: "Build Environment - Container"
   block:
   - name: "Build the Execution Environment image"
@@ -87,11 +91,11 @@
       state: latest
   - name: "Build the Execution Environment image"
     command: 
-      cmd: "{{builder_path}}/{{venv}}/bin/ansible-builder build --tag quay.io/canit0/ee-custom-container:{{tag_version}} --container-runtime podman"
+      cmd: "{{builder_path}}/{{venv}}/bin/ansible-builder build --tag {{remote_registry}}:{{tag_version}} --container-runtime podman"
       chdir: "{{builder_path}}/"
-      #- name: "Push the Execution Environment image"
-      #command: 
-      #cmd: "podman push {{remote_registry}}:{{tag_version}}"
+  #- name: "Push the Execution Environment image"
+  #  command: 
+  #    cmd: "podman push {{remote_registry}}:{{tag_version}}"
   vars:
     ansible_python_interpreter: "{{builder_path}}/{{venv}}/bin/pyvenv"
     PROJECT_HOME: "{{builder_path}}/{{venv}}" 

@@ -50,6 +50,31 @@ Before running this role update the following configuration files with the prope
 **C**.) Alternatively, drop in the [Tower cli configuration](https://tower-cli.readthedocs.io/en/latest/quickstart.html). First, you'll need to install the [`ansible-tower-cli`](https://tower-cli.readthedocs.io/en/latest/install.html) via pip.
 
 
+To manually verify the requirements in a collection run:
+
+   ansible-builder introspect --sanitize ~/.ansible/collections/
+
+Example output:
+
+   ---
+   python:
+   - 'jsonschema  # from collection ansible.utils'
+   - 'textfsm  # from collection ansible.utils'
+   - 'ttp  # from collection ansible.utils'
+   - 'xmltodict  # from collection ansible.utils'
+   - 'pytz  # from collection awx.awx'
+   - 'python-dateutil>=2.7.0  # from collection awx.awx'
+   - 'awxkit  # from collection awx.awx'
+   - 'dnacentersdk>=2.0.2  # from collection cisco.dnac'
+   system:
+   - 'gcc-c++ [doc test platform:rpm]  # from collection ansible.utils'
+   - 'python3-devel [test platform:rpm]  # from collection ansible.utils'
+   - 'python3 [test platform:rpm]  # from collection ansible.utils'
+   - 'python38-pytz [platform:centos-8 platform:rhel-8]  # from collection awx.awx'
+   - 'python38-requests [platform:centos-8 platform:rhel-8]  # from collection awx.awx'
+   - 'python38-pyyaml [platform:centos-8 platform:rhel-8]  # from collection awx.awx'
+
+
 Example Playbook
 ----------------
 

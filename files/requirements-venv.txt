@@ -1,6 +1,5 @@
-ansible
+ansible==2.9.7
 ansible-navigator
-ansible-builder
 ansible-runner
-ansible-tower-cli
+ansible-builder
 ansible-test
