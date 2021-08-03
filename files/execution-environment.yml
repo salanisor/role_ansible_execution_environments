@@ -2,8 +2,10 @@
 version: 1
 
 build_arg_defaults:
+  ANSIBLE_GALAXY_CLI_COLLECTION_OPTS: "-v"
   #EE_BASE_IMAGE: 'registry.redhat.io/ansible-automation-platform-20-early-access/ee-minimal-rhel8'
-  EE_BASE_IMAGE: 'registry.redhat.io/ansible-automation-platform-20-early-access/ee-supported-rhel8'
+  EE_BASE_IMAGE: 'quay.io/ansible/ansible-runner:stable-2.9-devel'
+  EE_BUILDER_IMAGE: 'quay.io/ansible/ansible-builder:latest'
 
 dependencies:
   galaxy: requirements-ee.yml
@@ -15,3 +17,4 @@ additional_build_steps:
     RUN pip3 install --upgrade pip setuptools bindep
   append:
     - RUN alternatives --set python /usr/bin/python3
+    - RUN pip install ansible==2.9.7
