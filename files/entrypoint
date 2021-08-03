@@ -2,4 +2,6 @@
 
 . /ansible-runner/bin/activate
 
+#export ANSIBLE_STDOUT_CALLBACK="yaml"
+
 exec /usr/local/bin/dumb-init -- ${@}

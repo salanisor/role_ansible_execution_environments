@@ -15,9 +15,8 @@
     - podman
     - skopeo
     - buildah
-      #- python39.x86_64
-      #when: (ansible_distribution == "RedHat") and
-      #    (ansible_distribution_major_version >= "8")
+    #when: (ansible_distribution == "RedHat") and
+    #      (ansible_distribution_major_version >= "8")
   - name: "Create subuid range file"
     copy:
       dest: /etc/subuid

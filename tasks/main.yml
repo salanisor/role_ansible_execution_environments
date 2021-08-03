@@ -67,8 +67,8 @@
     command: 
       cmd: "podman image build -t {{remote_registry}}:{{tag_version}} -f Containerfile"
       chdir: "{{builder_path}}/"
-      - name: "Push the Execution Environment image"
-      command: 
+  - name: "Push the Execution Environment image"
+    command: 
       cmd: "podman push {{remote_registry}}:{{tag_version}}"
   vars:
     PROJECT_HOME: "{{builder_path}}/"
@@ -93,9 +93,9 @@
     command: 
       cmd: "{{builder_path}}/{{venv}}/bin/ansible-builder build --tag {{remote_registry}}:{{tag_version}} --container-runtime podman"
       chdir: "{{builder_path}}/"
-  - name: "Push the Execution Environment image"
-    command: 
-      cmd: "podman push {{remote_registry}}:{{tag_version}}"
+  #- name: "Push the Execution Environment image"
+  #  command: 
+  #    cmd: "podman push {{remote_registry}}:{{tag_version}}"
   vars:
     ansible_python_interpreter: "{{builder_path}}/{{venv}}/bin/pyvenv"
     PROJECT_HOME: "{{builder_path}}/{{venv}}" 

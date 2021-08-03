@@ -74,6 +74,44 @@ Example output:
     - 'python38-requests [platform:centos-8 platform:rhel-8]  # from collection awx.awx'
     - 'python38-pyyaml [platform:centos-8 platform:rhel-8]  # from collection awx.awx'
 
+To manually verify the requirements in your current `venv` run:
+
+    pip freeze > requirements.txt
+
+Output example: `cat requirements.txt`
+
+
+    ansible==4.3.0
+    ansible-builder==1.0.1
+    ansible-core==2.11.3
+    ansible-navigator==1.0.0
+    ansible-runner==2.0.1
+    ansible-test==1.0.1
+    bindep==2.9.0
+    cffi==1.14.6
+    cryptography==3.4.7
+    dataclasses==0.8
+    distro==1.5.0
+    docutils==0.17.1
+    importlib-resources==5.2.0
+    Jinja2==3.0.1
+    lockfile==0.12.2
+    MarkupSafe==2.0.1
+    onigurumacffi==1.1.0
+    packaging==21.0
+    Parsley==1.3
+    pbr==5.6.0
+    pexpect==4.8.0
+    ptyprocess==0.7.0
+    pycparser==2.20
+    pyparsing==2.4.7
+    python-daemon==2.3.0
+    PyYAML==5.4.1
+    requirements-parser==0.2.0
+    resolvelib==0.5.4
+    six==1.16.0
+    zipp==3.5.0
+
 
 Example Playbook
 ----------------
