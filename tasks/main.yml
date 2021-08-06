@@ -49,10 +49,23 @@
     dest: "{{builder_path}}/execution-environment.yml"
   tags:
   - container
+- name: "Drop in the proper ansible.cfg file"
+  copy:
+    src: ansible.cfg
+    dest: "{{builder_path}}/ansible.cfg"
+    backup: yes
+    mode: '0444'
+    #owner: root
+    #group: root
+    decrypt: yes
+  tags:
+  - container
 - name: "Create requirements.yml file - EE"
   copy:
     src: requirements-ee.yml
     dest: "{{builder_path}}/requirements-ee.yml"
+  tags:
+  - container
 - name: "Create requirements.txt file - EE"
   copy:
     src: requirements-ee.txt

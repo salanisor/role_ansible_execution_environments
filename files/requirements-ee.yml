@@ -1,4 +1,7 @@
 ---
 collections:
+  - community.kubernetes
   - kubernetes.core
   - community.general
+  - name: redhat.openshift
+    version: 2.0.1

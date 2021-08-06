@@ -1,3 +1,5 @@
+# To create a secret from an existing kubeconfig, run:
+# oc create secret generic kconfig --from-file=config.json=namespacecreate-kubeconfig.yaml -n ansible-tower
 apiVersion: v1
 kind: Pod
 metadata:
@@ -11,3 +13,12 @@ spec:
       args:
         - sleep
         - infinity
+      volumeMounts:
+      - name: kubeconfig
+        mountPath: /home/runner/.kube/config.json
+        subPath: config.json
+        readOnly: true
+  volumes:
+  - name: kubeconfig
+    secret:
+      secretName: kconfig

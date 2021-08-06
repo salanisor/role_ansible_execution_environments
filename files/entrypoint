@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-. /ansible-runner/bin/activate
+. /runner/bin/activate
 
 #export ANSIBLE_STDOUT_CALLBACK="yaml"
 
