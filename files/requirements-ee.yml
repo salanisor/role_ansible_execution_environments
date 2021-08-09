@@ -1,6 +1,5 @@
 ---
 collections:
-  - community.kubernetes
   - kubernetes.core
   - community.general
   - name: redhat.openshift
