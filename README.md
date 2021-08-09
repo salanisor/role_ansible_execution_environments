@@ -1,13 +1,13 @@
-Role Name
+Ansible Execution Environments
 =========
 
-You can build Execution Environment container images to separate the control plane from the execution plane and execute your playbooks and roles directly from Tower on to your Kubernetes cluster.
+You can build **execution environment** container images to separate the control plane from the execution plane and deploy your playbooks and roles directly from Tower to execute on your Kubernetes cluster.
 
 This role can be used in two ways:
 
-**1**.) You can build an Execution Environment directly via Podman. 
+**1**.) You can build an execution environment directly via Podman/Docker. 
 
-**2**.) For testing and local development, you can build a virtual environment on a local machine and push to a local or remote registry with either method.
+**2**.) For local testing and development, you can build a virtual environment and push to a local or remote registry with either method.
 
 Requirements
 ------------
@@ -15,7 +15,7 @@ Requirements
 
 **1**.) Single Ansible Tower instance or Ansible Tower cluster (tested on a 3 node cluster proxied via HAproxy).
 
-**2**.) Administrative access to an existing Kubernetes cluster to create a namespace to deploy the Execution Environment to via a [Container Group](https://docs.ansible.com/ansible-tower/latest/html/administration/external_execution_envs.html#ag-container-groups) in Ansible Tower.
+**2**.) Administrative access to an existing Kubernetes cluster to create a namespace & required permissions to deploy the **execution environment** to via a [Container Group](https://docs.ansible.com/ansible-tower/latest/html/administration/external_execution_envs.html#ag-container-groups) in Ansible Tower.
 
   - [Kubernetes](https://github.com/salanisor/role_ansible_execution_environments/blob/master/files/execution-environments-k8s-template.yaml) namespace creation template for project `ansible-tower`.
 
@@ -29,10 +29,13 @@ Role Variables
 
     # Path to your build artifacts directory.
     builder_path: '/tmp/ansible-builder'
+
     # Name you want to give to your virtual environment directory.
     venv: 'test_venv'
+
     # Container image tag version.
     tag_version: '0.0.1'
+
     # The remote registry you want to publish to.
     remote_registry: 'quay.io/canit0/ee-custom-container'
 
@@ -41,9 +44,9 @@ Role Variables
 Dependencies
 ------------
 
-Before running this role update the following configuration files with the proper authentication credentials.
+Before running this role you can configure the following configuration files with the proper authentication credentials.
 
-**A**.) [Configure](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/1.0/html/getting_started_with_red_hat_ansible_automation_hub/proc-configure-automation-hub-server) `ansible.cfg` with your `ansible_hub` [authentication token](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/1.0/html/getting_started_with_red_hat_ansible_automation_hub/proc-create-api-token).
+**A**.) [Configure](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/1.0/html/getting_started_with_red_hat_ansible_automation_hub/proc-configure-automation-hub-server) `ansible.cfg` with your `ansible_hub` or private hub [authentication token](https://access.redhat.com/documentation/en-us/red_hat_ansible_automation_platform/1.0/html/getting_started_with_red_hat_ansible_automation_hub/proc-create-api-token).
 
 **B**.) [Configure the registry credentials](https://access.redhat.com/terms-based-registry/) to pull from `registry.redhat.io` when building your Execution Environments and recommend updating this with your internal / external registry credentials you'll be pushing the Execution Environment container image to.
 
@@ -81,7 +84,7 @@ To manually verify the requirements in your current `venv` run:
 Output example: `cat requirements.txt`
 
 
-    ansible==4.3.0
+    ansible==2.9.7
     ansible-builder==1.0.1
     ansible-core==2.11.3
     ansible-navigator==1.0.0
@@ -116,11 +119,11 @@ Output example: `cat requirements.txt`
 Example Playbook
 ----------------
 
-Once you update the [role varilables](https://github.com/salanisor/role_ansible_execution_environments#role-variables) execute the following playbook to build your Execution Environment.
+Once you update the [role varilables](https://github.com/salanisor/role_ansible_execution_environments#role-variables) execute the playbook to build your execution environment.
 
     ---
     #
-    # Simple Ansible playbook to set up the environment to build an Execution Environment image.
+    # Simple Ansible playbook to set up the environment to build an execution environment image.
     #
     # How-to: ansible-playbook -v execution_environments.yaml
     #
